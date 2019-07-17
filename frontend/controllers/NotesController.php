@@ -27,6 +27,17 @@ class NotesController extends ActiveController
         return $actions;
     }
 
+    protected function verbs()
+    {
+        return [
+            'index' => ['GET', 'HEAD', 'POST'],
+            'view' => ['GET', 'HEAD'],
+            'create' => ['POST'],
+            'update' => ['PUT', 'PATCH'],
+            'delete' => ['DELETE'],
+        ];
+    }
+
     public function prepareDataProvider()
     {
         // prepare and return a data provider for the "index" action
@@ -56,7 +67,7 @@ class NotesController extends ActiveController
 
     public function actionIndex()
     {
-        if(Yii::$app->request->post())
+        if(Yii::$app->request->isPost)
         {
             return Note::CreateNote(Yii::$app->request->queryParams);
         }

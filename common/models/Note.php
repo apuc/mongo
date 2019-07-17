@@ -19,6 +19,13 @@ class Note extends ActiveRecord
         return ['_id', 'name', 'description', 'authorId', 'createdAt', 'updatedAt'];
     }
 
+    public function rules()
+    {
+        return [
+          [['name', 'description'], 'required'],
+        ];
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['_id' => 'authorId']);
@@ -42,14 +49,6 @@ class Note extends ActiveRecord
         $collection->insert([
               'name' => $params['name'],
               'description' => $params['description'],
-//            'name' => function ($params['name'], $faker){
-//            $name = $params['name'] ? $params['name'] : $faker->department(3);
-//            return $name;
-//            },
-//            'description' => function($params['description'], $faker) {
-//            $description = $params['description'] ? $params['description'] :  $faker->text;
-//            return $description;
-//            },
             'authorId' => User::getRandomUser(),
             'createdAt' => strtotime($faker->date('d-m-Y')),
             'updatedAt' => strtotime($faker->date('d-m-Y')),
