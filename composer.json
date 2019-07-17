@@ -19,7 +19,9 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-mongodb": "^2.1",
-        "mbezhanov/faker-provider-collection": "^1.2"
+        "mbezhanov/faker-provider-collection": "^1.2",
+        "jenssegers/mongodb": "^3.5",
+        "mongodb/mongodb": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

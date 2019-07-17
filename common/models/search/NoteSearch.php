@@ -2,7 +2,6 @@
 
 namespace common\models\search;
 
-use backend\modules\holiday\models\Holiday;
 use common\classes\Debug;
 use common\models\Note;
 use yii\data\ActiveDataProvider;
@@ -22,6 +21,8 @@ class NoteSearch extends Note
     public function search($params)
     {
         $query = Note::find()->with('user');
+//        $query->leftJoin('user','user._id=note.authorId');
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -34,9 +35,10 @@ class NoteSearch extends Note
             // $query->where('0=1');
             return $dataProvider;
         }
-
-//        $query->andFilterWhere(['like', 'user.email' , $this->email]);
-
+//        Debug::prn($this->email);
+        $query->andFilterWhere(['user.email' => $this->email]);
+//        $query->andWhere(['=', 'authorId' , $this->authorId]);
+        Debug::dd($query->andFilterCompare());
         // grid filtering conditions
         return $dataProvider->getModels();
     }
