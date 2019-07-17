@@ -2,9 +2,9 @@
 
 namespace common\models\search;
 
-use backend\modules\holiday\models\Holiday;
 use common\classes\Debug;
 use common\models\Note;
+use common\models\User;
 use yii\data\ActiveDataProvider;
 
 class NoteSearch extends Note
@@ -21,24 +21,26 @@ class NoteSearch extends Note
 
     public function search($params)
     {
-        $query = Note::find()->with('user');
+        $queryNote = Note::find();
+        $result = $this->getUserByParams($params);
+
+        if ($result !== null && !empty($result)) {
+            $queryNote->andFilterWhere(['in', 'authorId', $result]);
+        }
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $queryNote,
         ]);
 
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
 
-//        $query->andFilterWhere(['like', 'user.email' , $this->email]);
-
         // grid filtering conditions
-        return $dataProvider->getModels();
+        return $dataProvider;
     }
 
     public function loadParams($data = [])
@@ -48,5 +50,28 @@ class NoteSearch extends Note
                 $this->{$key} = $v;
             }
         }
+    }
+
+    public function getUserByParams($params)
+    {
+        if(empty($params)) return null;
+        $ids = [];
+        $fl = 0;
+        $queryUser = User::find();
+
+        foreach ($params as $key => $v) {
+            if ($this->hasProperty($key)) {
+                $queryUser->andFilterWhere(['like', $key, $v]);
+                $fl = 1;
+            }
+        }
+        if($fl == 0) return null;
+        $result = $queryUser->all();
+
+        foreach ($result as $value) {
+            $ids[] = (string) $value->_id;
+        }
+
+        return $ids;
     }
 }

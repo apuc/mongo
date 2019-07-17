@@ -9,7 +9,7 @@ use Yii;
 use yii\mongodb\Query;
 use yii\rest\ActiveController;
 
-class UserController extends ActiveController
+class UsersController extends ActiveController
 {
     public $modelClass = 'common\models\User';
 
