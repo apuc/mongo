@@ -11,7 +11,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 
-class NoteController extends ActiveController
+class NotesController extends ActiveController
 {
     public $modelClass = 'common\models\Note';
 
@@ -56,6 +56,11 @@ class NoteController extends ActiveController
 
     public function actionIndex()
     {
+        if(Yii::$app->request->post())
+        {
+            return Note::CreateNote(Yii::$app->request->queryParams);
+        }
+
         $search = new NoteSearch();
         $search->loadParams(Yii::$app->request->get());
 
